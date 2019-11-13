@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'com.google.protobuf' version "0.8.7"
+}
+
+group 'record-layer-demo'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/generated/main/java'
+        }
+    }
+}
+
+dependencies {
+    compile group: 'org.foundationdb', name: 'fdb-record-layer-core-pb3', version: '2.8.90.0'
+    
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+protobuf {
+    generatedFilesBaseDir = "${projectDir}/src/main/generated"
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.6.1'
+    }
+}
