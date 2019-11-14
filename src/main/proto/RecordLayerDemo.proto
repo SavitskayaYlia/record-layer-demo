@@ -3,11 +3,14 @@ syntax = "proto2";
 option java_outer_classname = "RecordLayerDemoProto";
 
 import "record_metadata_options.proto";
+import "OrderIndex.proto";
 
 message Order {
-    optional int64 order_id = 1;
-    optional Flower flower = 2;
-    optional int32 price = 3;
+    optional int32 order_id = 1;
+    optional int32 sub_order_id = 2;
+
+    optional Flower flower = 3;
+    optional int32 price = 4;
 }
 
 message Flower {
@@ -35,5 +38,6 @@ message UnionDescriptor {
     option (com.apple.foundationdb.record.record).usage = UNION;
     optional Order _Order = 1;
     optional SomeMore _SomeMore = 2;
-
+    optional OrderIndex _OrderIndex = 3;
 }
+

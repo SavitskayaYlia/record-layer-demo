@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+option java_outer_classname = "OrderIndexProto";
+
+import "record_metadata_options.proto";
+
+message OrderIndex {
+    optional int32 order_id = 1;
+    optional int32 sub_order_id = 2;
+    optional string name = 3;
+}

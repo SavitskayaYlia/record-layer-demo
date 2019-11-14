@@ -3,12 +3,15 @@ import com.apple.foundationdb.record.RecordMetaData;
 import com.apple.foundationdb.record.RecordMetaDataBuilder;
 import com.apple.foundationdb.record.metadata.Index;
 import com.apple.foundationdb.record.metadata.Key;
+import com.apple.foundationdb.record.metadata.Key.Expressions;
 import com.apple.foundationdb.record.provider.foundationdb.*;
 import com.apple.foundationdb.record.provider.foundationdb.keyspace.KeySpace;
 import com.apple.foundationdb.record.provider.foundationdb.keyspace.KeySpaceDirectory;
 import com.apple.foundationdb.record.provider.foundationdb.keyspace.KeySpacePath;
 import com.apple.foundationdb.record.query.RecordQuery;
 import com.apple.foundationdb.record.query.expressions.Query;
+import com.apple.foundationdb.record.query.plan.RecordQueryPlanner;
+import com.apple.foundationdb.record.query.plan.plans.RecordQueryPlan;
 import com.apple.foundationdb.tuple.Tuple;
 import com.google.protobuf.Message;
 
@@ -29,7 +32,6 @@ public class AllExampleInOnePlace {
                 .setColor(color)
                 .build();
     }
-
 
     public static void main(String[] args) {
         /*
@@ -64,7 +66,11 @@ public class AllExampleInOnePlace {
                 .setRecords(RecordLayerDemoProto.getDescriptor()); // based on UnionDescriptor message from proto (or RecordTypeUnion)
         // Set the primary key to order_id
         metaDataBuilder.getRecordType("Order")
-                .setPrimaryKey(Key.Expressions.field("order_id"));
+                .setPrimaryKey(
+                        Expressions.concat(
+                               Key.Expressions.field("order_id"),
+                               Key.Expressions.field("sub_order_id")
+                ));
         metaDataBuilder.getRecordType("SomeMore")
                 .setPrimaryKey(Key.Expressions.field("id"));
         // Add a secondary index on price
@@ -105,21 +111,32 @@ public class AllExampleInOnePlace {
 
             recordStore.saveRecord(RecordLayerDemoProto.Order.newBuilder()
                     .setOrderId(1)
+                    .setSubOrderId(1)
                     .setPrice(123)
                     .setFlower(buildFlower(FlowerType.ROSE, RecordLayerDemoProto.Color.RED))
                     .build());
             recordStore.saveRecord(RecordLayerDemoProto.Order.newBuilder()
+                    .setOrderId(1)
+                    .setSubOrderId(2)
+                    .setPrice(123)
+                    .setFlower(buildFlower(FlowerType.ROSE, RecordLayerDemoProto.Color.RED))
+                    .build());
+
+            recordStore.saveRecord(RecordLayerDemoProto.Order.newBuilder()
                     .setOrderId(23)
+                    .setSubOrderId(23)
                     .setPrice(34)
                     .setFlower(buildFlower(FlowerType.ROSE, RecordLayerDemoProto.Color.PINK))
                     .build());
             recordStore.saveRecord(RecordLayerDemoProto.Order.newBuilder()
                     .setOrderId(3)
+                    .setSubOrderId(33)
                     .setPrice(55)
                     .setFlower(buildFlower(FlowerType.TULIP, RecordLayerDemoProto.Color.YELLOW))
                     .build());
             recordStore.saveRecord(RecordLayerDemoProto.Order.newBuilder()
                     .setOrderId(100)
+                    .setSubOrderId(101)
                     .setPrice(9)
                     .setFlower(buildFlower(FlowerType.LILY, RecordLayerDemoProto.Color.RED))
                     .build());
@@ -148,12 +165,12 @@ public class AllExampleInOnePlace {
         // 6.
         FDBStoredRecord<Message> storedRecord = db.run(context ->
                 // load the record
-                recordStoreProvider.apply(context).loadRecord(Tuple.from(1))
+                recordStoreProvider.apply(context).loadRecord(Tuple.from(1).add(1))
         );
         assert storedRecord != null;
         // a record that doesn't exist is null
         FDBStoredRecord<Message> shouldNotExist = db.run(context ->
-                recordStoreProvider.apply(context).loadRecord(Tuple.from(99999))
+                recordStoreProvider.apply(context).loadRecord(Tuple.from(99999).add(10))
         );
         assert shouldNotExist == null;
 
@@ -165,32 +182,44 @@ public class AllExampleInOnePlace {
         RecordLayerDemoProto.Order order = RecordLayerDemoProto.Order.newBuilder()
                 .mergeFrom(storedRecord.getRecord())
                 .build();
-        //System.out.println(order);
+        System.out.println(order);
 
         RecordLayerDemoProto.SomeMore someMore = RecordLayerDemoProto.SomeMore.newBuilder()
                 .mergeFrom(storedRecord2.getRecord())
                 .build();
         System.out.println(someMore);
 
+        Function<RecordQuery, List<RecordLayerDemoProto.Order>> RunQuery = query ->
+            db.run( context -> {
+                FDBRecordStore recordStore = recordStoreProvider.apply(context);
+                RecordCursor<FDBQueriedRecord<Message>> coursor = recordStore.executeQuery(query);
+                RecordQueryPlan plan = recordStore.planQuery(query);
+                return coursor.map(msg ->
+                        RecordLayerDemoProto.Order.newBuilder().mergeFrom(msg.getRecord()).build()
+                ).asList().join();
+            });
 
         // query on our data
         RecordQuery query = RecordQuery.newBuilder()
                 .setRecordType("Order")
-                .setFilter(Query.and(
-                        Query.field("price").lessThan(50),
+                .setFilter( Query.and(
+                        Query.field("price").equalsValue(34),
                         Query.field("flower").matches(Query.field("type").equalsValue(FlowerType.ROSE.name()))))
                 .build();
-        List<RecordLayerDemoProto.Order> orders = db.run( context -> {
-            FDBRecordStore recordStore = recordStoreProvider.apply(context);
-            RecordCursor<FDBQueriedRecord<Message>> coursor = recordStore.executeQuery(query);
-            return coursor.map(msg ->
-                    RecordLayerDemoProto.Order.newBuilder().mergeFrom(msg.getRecord()).build()
-            ).asList().join();
-        });
 
+        List<RecordLayerDemoProto.Order> orders = RunQuery.apply(query);
         orders.forEach(System.out::println);
 
+        // query on our data
+        RecordQuery query_notgood = RecordQuery.newBuilder()
+                .setRecordType("Order")
+                .setFilter( Query.and(
+                        Query.field("sub_order_id").equalsValue(2),
+                        Query.field("order_id").equalsValue(1)))
+                .build();
+        List<RecordLayerDemoProto.Order> orders_notgood = RunQuery.apply(query_notgood);
 
     }
 
 }
+

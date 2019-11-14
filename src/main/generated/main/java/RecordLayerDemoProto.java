@@ -125,33 +125,42 @@ public final class RecordLayerDemoProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>optional int64 order_id = 1;</code>
+     * <code>optional int32 order_id = 1;</code>
      */
     boolean hasOrderId();
     /**
-     * <code>optional int64 order_id = 1;</code>
+     * <code>optional int32 order_id = 1;</code>
      */
-    long getOrderId();
+    int getOrderId();
 
     /**
-     * <code>optional .Flower flower = 2;</code>
+     * <code>optional int32 sub_order_id = 2;</code>
+     */
+    boolean hasSubOrderId();
+    /**
+     * <code>optional int32 sub_order_id = 2;</code>
+     */
+    int getSubOrderId();
+
+    /**
+     * <code>optional .Flower flower = 3;</code>
      */
     boolean hasFlower();
     /**
-     * <code>optional .Flower flower = 2;</code>
+     * <code>optional .Flower flower = 3;</code>
      */
     RecordLayerDemoProto.Flower getFlower();
     /**
-     * <code>optional .Flower flower = 2;</code>
+     * <code>optional .Flower flower = 3;</code>
      */
     RecordLayerDemoProto.FlowerOrBuilder getFlowerOrBuilder();
 
     /**
-     * <code>optional int32 price = 3;</code>
+     * <code>optional int32 price = 4;</code>
      */
     boolean hasPrice();
     /**
-     * <code>optional int32 price = 3;</code>
+     * <code>optional int32 price = 4;</code>
      */
     int getPrice();
   }
@@ -168,7 +177,8 @@ public final class RecordLayerDemoProto {
       super(builder);
     }
     private Order() {
-      orderId_ = 0L;
+      orderId_ = 0;
+      subOrderId_ = 0;
       price_ = 0;
     }
 
@@ -198,12 +208,17 @@ public final class RecordLayerDemoProto {
               break;
             case 8: {
               bitField0_ |= 0x00000001;
-              orderId_ = input.readInt64();
+              orderId_ = input.readInt32();
               break;
             }
-            case 18: {
+            case 16: {
+              bitField0_ |= 0x00000002;
+              subOrderId_ = input.readInt32();
+              break;
+            }
+            case 26: {
               RecordLayerDemoProto.Flower.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
                 subBuilder = flower_.toBuilder();
               }
               flower_ = input.readMessage(RecordLayerDemoProto.Flower.PARSER, extensionRegistry);
@@ -211,11 +226,11 @@ public final class RecordLayerDemoProto {
                 subBuilder.mergeFrom(flower_);
                 flower_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000002;
+              bitField0_ |= 0x00000004;
               break;
             }
-            case 24: {
-              bitField0_ |= 0x00000004;
+            case 32: {
+              bitField0_ |= 0x00000008;
               price_ = input.readInt32();
               break;
             }
@@ -253,51 +268,66 @@ public final class RecordLayerDemoProto {
 
     private int bitField0_;
     public static final int ORDER_ID_FIELD_NUMBER = 1;
-    private long orderId_;
+    private int orderId_;
     /**
-     * <code>optional int64 order_id = 1;</code>
+     * <code>optional int32 order_id = 1;</code>
      */
     public boolean hasOrderId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>optional int64 order_id = 1;</code>
+     * <code>optional int32 order_id = 1;</code>
      */
-    public long getOrderId() {
+    public int getOrderId() {
       return orderId_;
     }
 
-    public static final int FLOWER_FIELD_NUMBER = 2;
-    private RecordLayerDemoProto.Flower flower_;
+    public static final int SUB_ORDER_ID_FIELD_NUMBER = 2;
+    private int subOrderId_;
     /**
-     * <code>optional .Flower flower = 2;</code>
+     * <code>optional int32 sub_order_id = 2;</code>
      */
-    public boolean hasFlower() {
+    public boolean hasSubOrderId() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional .Flower flower = 2;</code>
+     * <code>optional int32 sub_order_id = 2;</code>
+     */
+    public int getSubOrderId() {
+      return subOrderId_;
+    }
+
+    public static final int FLOWER_FIELD_NUMBER = 3;
+    private RecordLayerDemoProto.Flower flower_;
+    /**
+     * <code>optional .Flower flower = 3;</code>
+     */
+    public boolean hasFlower() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .Flower flower = 3;</code>
      */
     public RecordLayerDemoProto.Flower getFlower() {
       return flower_ == null ? RecordLayerDemoProto.Flower.getDefaultInstance() : flower_;
     }
     /**
-     * <code>optional .Flower flower = 2;</code>
+     * <code>optional .Flower flower = 3;</code>
      */
     public RecordLayerDemoProto.FlowerOrBuilder getFlowerOrBuilder() {
       return flower_ == null ? RecordLayerDemoProto.Flower.getDefaultInstance() : flower_;
     }
 
-    public static final int PRICE_FIELD_NUMBER = 3;
+    public static final int PRICE_FIELD_NUMBER = 4;
     private int price_;
     /**
-     * <code>optional int32 price = 3;</code>
+     * <code>optional int32 price = 4;</code>
      */
     public boolean hasPrice() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional int32 price = 3;</code>
+     * <code>optional int32 price = 4;</code>
      */
     public int getPrice() {
       return price_;
@@ -318,13 +348,16 @@ public final class RecordLayerDemoProto {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt64(1, orderId_);
+        output.writeInt32(1, orderId_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(2, getFlower());
+        output.writeInt32(2, subOrderId_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, price_);
+        output.writeMessage(3, getFlower());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(4, price_);
       }
       unknownFields.writeTo(output);
     }
@@ -337,15 +370,19 @@ public final class RecordLayerDemoProto {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(1, orderId_);
+          .computeInt32Size(1, orderId_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, getFlower());
+          .computeInt32Size(2, subOrderId_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, price_);
+          .computeMessageSize(3, getFlower());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, price_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -367,6 +404,11 @@ public final class RecordLayerDemoProto {
       if (hasOrderId()) {
         result = result && (getOrderId()
             == other.getOrderId());
+      }
+      result = result && (hasSubOrderId() == other.hasSubOrderId());
+      if (hasSubOrderId()) {
+        result = result && (getSubOrderId()
+            == other.getSubOrderId());
       }
       result = result && (hasFlower() == other.hasFlower());
       if (hasFlower()) {
@@ -391,8 +433,11 @@ public final class RecordLayerDemoProto {
       hash = (19 * hash) + getDescriptor().hashCode();
       if (hasOrderId()) {
         hash = (37 * hash) + ORDER_ID_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-            getOrderId());
+        hash = (53 * hash) + getOrderId();
+      }
+      if (hasSubOrderId()) {
+        hash = (37 * hash) + SUB_ORDER_ID_FIELD_NUMBER;
+        hash = (53 * hash) + getSubOrderId();
       }
       if (hasFlower()) {
         hash = (37 * hash) + FLOWER_FIELD_NUMBER;
@@ -536,16 +581,18 @@ public final class RecordLayerDemoProto {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        orderId_ = 0L;
+        orderId_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
+        subOrderId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
         if (flowerBuilder_ == null) {
           flower_ = null;
         } else {
           flowerBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000002);
-        price_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
+        price_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -581,13 +628,17 @@ public final class RecordLayerDemoProto {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
+        result.subOrderId_ = subOrderId_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
         if (flowerBuilder_ == null) {
           result.flower_ = flower_;
         } else {
           result.flower_ = flowerBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
         }
         result.price_ = price_;
         result.bitField0_ = to_bitField0_;
@@ -642,6 +693,9 @@ public final class RecordLayerDemoProto {
         if (other.hasOrderId()) {
           setOrderId(other.getOrderId());
         }
+        if (other.hasSubOrderId()) {
+          setSubOrderId(other.getSubOrderId());
+        }
         if (other.hasFlower()) {
           mergeFlower(other.getFlower());
         }
@@ -678,34 +732,66 @@ public final class RecordLayerDemoProto {
       }
       private int bitField0_;
 
-      private long orderId_ ;
+      private int orderId_ ;
       /**
-       * <code>optional int64 order_id = 1;</code>
+       * <code>optional int32 order_id = 1;</code>
        */
       public boolean hasOrderId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>optional int64 order_id = 1;</code>
+       * <code>optional int32 order_id = 1;</code>
        */
-      public long getOrderId() {
+      public int getOrderId() {
         return orderId_;
       }
       /**
-       * <code>optional int64 order_id = 1;</code>
+       * <code>optional int32 order_id = 1;</code>
        */
-      public Builder setOrderId(long value) {
+      public Builder setOrderId(int value) {
         bitField0_ |= 0x00000001;
         orderId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int64 order_id = 1;</code>
+       * <code>optional int32 order_id = 1;</code>
        */
       public Builder clearOrderId() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        orderId_ = 0L;
+        orderId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int subOrderId_ ;
+      /**
+       * <code>optional int32 sub_order_id = 2;</code>
+       */
+      public boolean hasSubOrderId() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional int32 sub_order_id = 2;</code>
+       */
+      public int getSubOrderId() {
+        return subOrderId_;
+      }
+      /**
+       * <code>optional int32 sub_order_id = 2;</code>
+       */
+      public Builder setSubOrderId(int value) {
+        bitField0_ |= 0x00000002;
+        subOrderId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 sub_order_id = 2;</code>
+       */
+      public Builder clearSubOrderId() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        subOrderId_ = 0;
         onChanged();
         return this;
       }
@@ -714,13 +800,13 @@ public final class RecordLayerDemoProto {
       private com.google.protobuf.SingleFieldBuilderV3<
           RecordLayerDemoProto.Flower, RecordLayerDemoProto.Flower.Builder, RecordLayerDemoProto.FlowerOrBuilder> flowerBuilder_;
       /**
-       * <code>optional .Flower flower = 2;</code>
+       * <code>optional .Flower flower = 3;</code>
        */
       public boolean hasFlower() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>optional .Flower flower = 2;</code>
+       * <code>optional .Flower flower = 3;</code>
        */
       public RecordLayerDemoProto.Flower getFlower() {
         if (flowerBuilder_ == null) {
@@ -730,7 +816,7 @@ public final class RecordLayerDemoProto {
         }
       }
       /**
-       * <code>optional .Flower flower = 2;</code>
+       * <code>optional .Flower flower = 3;</code>
        */
       public Builder setFlower(RecordLayerDemoProto.Flower value) {
         if (flowerBuilder_ == null) {
@@ -742,11 +828,11 @@ public final class RecordLayerDemoProto {
         } else {
           flowerBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         return this;
       }
       /**
-       * <code>optional .Flower flower = 2;</code>
+       * <code>optional .Flower flower = 3;</code>
        */
       public Builder setFlower(
           RecordLayerDemoProto.Flower.Builder builderForValue) {
@@ -756,15 +842,15 @@ public final class RecordLayerDemoProto {
         } else {
           flowerBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         return this;
       }
       /**
-       * <code>optional .Flower flower = 2;</code>
+       * <code>optional .Flower flower = 3;</code>
        */
       public Builder mergeFlower(RecordLayerDemoProto.Flower value) {
         if (flowerBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002) &&
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
               flower_ != null &&
               flower_ != RecordLayerDemoProto.Flower.getDefaultInstance()) {
             flower_ =
@@ -776,11 +862,11 @@ public final class RecordLayerDemoProto {
         } else {
           flowerBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         return this;
       }
       /**
-       * <code>optional .Flower flower = 2;</code>
+       * <code>optional .Flower flower = 3;</code>
        */
       public Builder clearFlower() {
         if (flowerBuilder_ == null) {
@@ -789,19 +875,19 @@ public final class RecordLayerDemoProto {
         } else {
           flowerBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
       /**
-       * <code>optional .Flower flower = 2;</code>
+       * <code>optional .Flower flower = 3;</code>
        */
       public RecordLayerDemoProto.Flower.Builder getFlowerBuilder() {
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         onChanged();
         return getFlowerFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .Flower flower = 2;</code>
+       * <code>optional .Flower flower = 3;</code>
        */
       public RecordLayerDemoProto.FlowerOrBuilder getFlowerOrBuilder() {
         if (flowerBuilder_ != null) {
@@ -812,7 +898,7 @@ public final class RecordLayerDemoProto {
         }
       }
       /**
-       * <code>optional .Flower flower = 2;</code>
+       * <code>optional .Flower flower = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
           RecordLayerDemoProto.Flower, RecordLayerDemoProto.Flower.Builder, RecordLayerDemoProto.FlowerOrBuilder> 
@@ -830,31 +916,31 @@ public final class RecordLayerDemoProto {
 
       private int price_ ;
       /**
-       * <code>optional int32 price = 3;</code>
+       * <code>optional int32 price = 4;</code>
        */
       public boolean hasPrice() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional int32 price = 3;</code>
+       * <code>optional int32 price = 4;</code>
        */
       public int getPrice() {
         return price_;
       }
       /**
-       * <code>optional int32 price = 3;</code>
+       * <code>optional int32 price = 4;</code>
        */
       public Builder setPrice(int value) {
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000008;
         price_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 price = 3;</code>
+       * <code>optional int32 price = 4;</code>
        */
       public Builder clearPrice() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
         price_ = 0;
         onChanged();
         return this;
@@ -2481,6 +2567,19 @@ public final class RecordLayerDemoProto {
      * <code>optional .SomeMore _SomeMore = 2;</code>
      */
     RecordLayerDemoProto.SomeMoreOrBuilder getSomeMoreOrBuilder();
+
+    /**
+     * <code>optional .OrderIndex _OrderIndex = 3;</code>
+     */
+    boolean hasOrderIndex();
+    /**
+     * <code>optional .OrderIndex _OrderIndex = 3;</code>
+     */
+    OrderIndexProto.OrderIndex getOrderIndex();
+    /**
+     * <code>optional .OrderIndex _OrderIndex = 3;</code>
+     */
+    OrderIndexProto.OrderIndexOrBuilder getOrderIndexOrBuilder();
   }
   /**
    * Protobuf type {@code UnionDescriptor}
@@ -2545,6 +2644,19 @@ public final class RecordLayerDemoProto {
                 SomeMore_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000002;
+              break;
+            }
+            case 26: {
+              OrderIndexProto.OrderIndex.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = OrderIndex_.toBuilder();
+              }
+              OrderIndex_ = input.readMessage(OrderIndexProto.OrderIndex.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(OrderIndex_);
+                OrderIndex_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
               break;
             }
             default: {
@@ -2622,6 +2734,27 @@ public final class RecordLayerDemoProto {
       return SomeMore_ == null ? RecordLayerDemoProto.SomeMore.getDefaultInstance() : SomeMore_;
     }
 
+    public static final int _ORDERINDEX_FIELD_NUMBER = 3;
+    private OrderIndexProto.OrderIndex OrderIndex_;
+    /**
+     * <code>optional .OrderIndex _OrderIndex = 3;</code>
+     */
+    public boolean hasOrderIndex() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .OrderIndex _OrderIndex = 3;</code>
+     */
+    public OrderIndexProto.OrderIndex getOrderIndex() {
+      return OrderIndex_ == null ? OrderIndexProto.OrderIndex.getDefaultInstance() : OrderIndex_;
+    }
+    /**
+     * <code>optional .OrderIndex _OrderIndex = 3;</code>
+     */
+    public OrderIndexProto.OrderIndexOrBuilder getOrderIndexOrBuilder() {
+      return OrderIndex_ == null ? OrderIndexProto.OrderIndex.getDefaultInstance() : OrderIndex_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -2642,6 +2775,9 @@ public final class RecordLayerDemoProto {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeMessage(2, getSomeMore());
       }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, getOrderIndex());
+      }
       unknownFields.writeTo(output);
     }
 
@@ -2658,6 +2794,10 @@ public final class RecordLayerDemoProto {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, getSomeMore());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, getOrderIndex());
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -2685,6 +2825,11 @@ public final class RecordLayerDemoProto {
         result = result && getSomeMore()
             .equals(other.getSomeMore());
       }
+      result = result && (hasOrderIndex() == other.hasOrderIndex());
+      if (hasOrderIndex()) {
+        result = result && getOrderIndex()
+            .equals(other.getOrderIndex());
+      }
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -2703,6 +2848,10 @@ public final class RecordLayerDemoProto {
       if (hasSomeMore()) {
         hash = (37 * hash) + _SOMEMORE_FIELD_NUMBER;
         hash = (53 * hash) + getSomeMore().hashCode();
+      }
+      if (hasOrderIndex()) {
+        hash = (37 * hash) + _ORDERINDEX_FIELD_NUMBER;
+        hash = (53 * hash) + getOrderIndex().hashCode();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -2834,6 +2983,7 @@ public final class RecordLayerDemoProto {
                 .alwaysUseFieldBuilders) {
           getOrderFieldBuilder();
           getSomeMoreFieldBuilder();
+          getOrderIndexFieldBuilder();
         }
       }
       @java.lang.Override
@@ -2851,6 +3001,12 @@ public final class RecordLayerDemoProto {
           SomeMoreBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000002);
+        if (OrderIndexBuilder_ == null) {
+          OrderIndex_ = null;
+        } else {
+          OrderIndexBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -2894,6 +3050,14 @@ public final class RecordLayerDemoProto {
           result.SomeMore_ = SomeMore_;
         } else {
           result.SomeMore_ = SomeMoreBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (OrderIndexBuilder_ == null) {
+          result.OrderIndex_ = OrderIndex_;
+        } else {
+          result.OrderIndex_ = OrderIndexBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -2949,6 +3113,9 @@ public final class RecordLayerDemoProto {
         }
         if (other.hasSomeMore()) {
           mergeSomeMore(other.getSomeMore());
+        }
+        if (other.hasOrderIndex()) {
+          mergeOrderIndex(other.getOrderIndex());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -3215,6 +3382,124 @@ public final class RecordLayerDemoProto {
         }
         return SomeMoreBuilder_;
       }
+
+      private OrderIndexProto.OrderIndex OrderIndex_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          OrderIndexProto.OrderIndex, OrderIndexProto.OrderIndex.Builder, OrderIndexProto.OrderIndexOrBuilder> OrderIndexBuilder_;
+      /**
+       * <code>optional .OrderIndex _OrderIndex = 3;</code>
+       */
+      public boolean hasOrderIndex() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .OrderIndex _OrderIndex = 3;</code>
+       */
+      public OrderIndexProto.OrderIndex getOrderIndex() {
+        if (OrderIndexBuilder_ == null) {
+          return OrderIndex_ == null ? OrderIndexProto.OrderIndex.getDefaultInstance() : OrderIndex_;
+        } else {
+          return OrderIndexBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .OrderIndex _OrderIndex = 3;</code>
+       */
+      public Builder setOrderIndex(OrderIndexProto.OrderIndex value) {
+        if (OrderIndexBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          OrderIndex_ = value;
+          onChanged();
+        } else {
+          OrderIndexBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .OrderIndex _OrderIndex = 3;</code>
+       */
+      public Builder setOrderIndex(
+          OrderIndexProto.OrderIndex.Builder builderForValue) {
+        if (OrderIndexBuilder_ == null) {
+          OrderIndex_ = builderForValue.build();
+          onChanged();
+        } else {
+          OrderIndexBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .OrderIndex _OrderIndex = 3;</code>
+       */
+      public Builder mergeOrderIndex(OrderIndexProto.OrderIndex value) {
+        if (OrderIndexBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              OrderIndex_ != null &&
+              OrderIndex_ != OrderIndexProto.OrderIndex.getDefaultInstance()) {
+            OrderIndex_ =
+              OrderIndexProto.OrderIndex.newBuilder(OrderIndex_).mergeFrom(value).buildPartial();
+          } else {
+            OrderIndex_ = value;
+          }
+          onChanged();
+        } else {
+          OrderIndexBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .OrderIndex _OrderIndex = 3;</code>
+       */
+      public Builder clearOrderIndex() {
+        if (OrderIndexBuilder_ == null) {
+          OrderIndex_ = null;
+          onChanged();
+        } else {
+          OrderIndexBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      /**
+       * <code>optional .OrderIndex _OrderIndex = 3;</code>
+       */
+      public OrderIndexProto.OrderIndex.Builder getOrderIndexBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getOrderIndexFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .OrderIndex _OrderIndex = 3;</code>
+       */
+      public OrderIndexProto.OrderIndexOrBuilder getOrderIndexOrBuilder() {
+        if (OrderIndexBuilder_ != null) {
+          return OrderIndexBuilder_.getMessageOrBuilder();
+        } else {
+          return OrderIndex_ == null ?
+              OrderIndexProto.OrderIndex.getDefaultInstance() : OrderIndex_;
+        }
+      }
+      /**
+       * <code>optional .OrderIndex _OrderIndex = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          OrderIndexProto.OrderIndex, OrderIndexProto.OrderIndex.Builder, OrderIndexProto.OrderIndexOrBuilder> 
+          getOrderIndexFieldBuilder() {
+        if (OrderIndexBuilder_ == null) {
+          OrderIndexBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              OrderIndexProto.OrderIndex, OrderIndexProto.OrderIndex.Builder, OrderIndexProto.OrderIndexOrBuilder>(
+                  getOrderIndex(),
+                  getParentForChildren(),
+                  isClean());
+          OrderIndex_ = null;
+        }
+        return OrderIndexBuilder_;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -3298,16 +3583,17 @@ public final class RecordLayerDemoProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\025RecordLayerDemo.proto\032\035record_metadata" +
-      "_options.proto\"A\n\005Order\022\020\n\010order_id\030\001 \001(" +
-      "\003\022\027\n\006flower\030\002 \001(\0132\007.Flower\022\r\n\005price\030\003 \001(" +
+      "_options.proto\032\020OrderIndex.proto\"W\n\005Orde" +
+      "r\022\020\n\010order_id\030\001 \001(\005\022\024\n\014sub_order_id\030\002 \001(" +
+      "\005\022\027\n\006flower\030\003 \001(\0132\007.Flower\022\r\n\005price\030\004 \001(" +
       "\005\"-\n\006Flower\022\014\n\004type\030\001 \001(\t\022\025\n\005color\030\002 \001(\016" +
       "2\006.Color\"M\n\010SomeMore\022\014\n\004name\030\001 \001(\t\022\n\n\002id" +
       "\030\002 \001(\005\022\020\n\010some_int\030\003 \001(\005\022\025\n\005color\030\004 \001(\0162" +
-      "\006.Color\"N\n\017UnionDescriptor\022\026\n\006_Order\030\001 \001" +
+      "\006.Color\"p\n\017UnionDescriptor\022\026\n\006_Order\030\001 \001" +
       "(\0132\006.Order\022\034\n\t_SomeMore\030\002 \001(\0132\t.SomeMore" +
-      ":\005\212M\002\010\002*0\n\005Color\022\007\n\003RED\020\001\022\010\n\004BLUE\020\002\022\n\n\006Y" +
-      "ELLOW\020\003\022\010\n\004PINK\020\004B\026B\024RecordLayerDemoProt" +
-      "o"
+      "\022 \n\013_OrderIndex\030\003 \001(\0132\013.OrderIndex:\005\212M\002\010" +
+      "\002*0\n\005Color\022\007\n\003RED\020\001\022\010\n\004BLUE\020\002\022\n\n\006YELLOW\020" +
+      "\003\022\010\n\004PINK\020\004B\026B\024RecordLayerDemoProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3321,13 +3607,14 @@ public final class RecordLayerDemoProto {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           com.apple.foundationdb.record.RecordMetaDataOptionsProto.getDescriptor(),
+          OrderIndexProto.getDescriptor(),
         }, assigner);
     internal_static_Order_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_Order_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Order_descriptor,
-        new java.lang.String[] { "OrderId", "Flower", "Price", });
+        new java.lang.String[] { "OrderId", "SubOrderId", "Flower", "Price", });
     internal_static_Flower_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_Flower_fieldAccessorTable = new
@@ -3345,13 +3632,14 @@ public final class RecordLayerDemoProto {
     internal_static_UnionDescriptor_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_UnionDescriptor_descriptor,
-        new java.lang.String[] { "Order", "SomeMore", });
+        new java.lang.String[] { "Order", "SomeMore", "OrderIndex", });
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();
     registry.add(com.apple.foundationdb.record.RecordMetaDataOptionsProto.record);
     com.google.protobuf.Descriptors.FileDescriptor
         .internalUpdateFileDescriptor(descriptor, registry);
     com.apple.foundationdb.record.RecordMetaDataOptionsProto.getDescriptor();
+    OrderIndexProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)
